@@ -88,6 +88,21 @@ CREATE PROCEDURE insertMovieJobPerson(IN imovieJobPersonPID INT, IN imovieJobPer
     VALUES (imovieJobPersonPID, imovieJobPersonJID, imovieJobPersonMID);
   end;
 
+CREATE PROCEDURE insertMovieStaffWithVar(IN inputPersonName VarChar(50), IN inputJobTitle VARCHAR(50), IN inputMovieName VARCHAR(50))
+    BEGIN
+        DECLARE varPersonId INT;
+        DECLARE varMovieId INT;
+        DECLARE varJobId INT;
+        SELECT personId INTO varPersonId FROM person WHERE personName = inputPersonName;
+        SELECT movieId INTO varMovieId FROM movie WHERE movieName = inputMovieName;
+        SELECT jobId INTO varJobId FROM job WHERE jobTitle = inputJobTitle;
+         INSERT INTO movieJobPerson(movieJobPersonPID, movieJobPersonJID, movieJobPersonMID)
+         VALUES (varPersonId, varMovieId, varJobId);
+    end;
+CALL insertMovieStaffWithVar("Daniel Radcliffe", "Actor", "Donnie Darko");
+
+DROP PROCEDURE IF EXISTS insertMovieStaffWithVar;
+
 SELECT * FROM movie;
 SELECT * FROM job;
 SELECT * FROM person;
