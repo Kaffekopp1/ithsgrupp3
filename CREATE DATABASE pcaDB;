@@ -1,4 +1,5 @@
 CREATE DATABASE pcaDB;
+use pcaDB;
 
 CREATE TABLE category(
   categoryId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -11,6 +12,7 @@ CREATE TABLE movie(
   movieYear INT,
   movieDescription VARCHAR(300),
   moviePoster VARCHAR(300),
+  movieRuntime INT,
   UNIQUE (movieName, movieYear)
 );
 
@@ -45,6 +47,52 @@ CREATE TABLE movieJobPerson(
   FOREIGN KEY (movieJobPersonMID) REFERENCES movie(movieId)
 );
 
+INSERT INTO movie (movieName, movieYear)
+VALUES ('Harry Potter and the Philosopher`s stone', 2001),
+       ('Interstellar', 2014),
+       ('Donnie Darko', 2001),
+       ('The Room', 2003),
+       ('Transformers One', 2024);
+
+INSERT INTO category(categoryName)
+VALUES ('Animation'),
+       ('Action'),
+       ('Adventure'),
+       ('Family'),
+       ('Fantasy'),
+       ('Sci-Fi'),
+       ('Drama'),
+       ('Thriller'),
+       ('Comedy');
+
+INSERT INTO job (jobTitle)
+VALUES ('Director'), ('Actor'), ('Screenwriter'), ('Composer');
+
+INSERT INTO person (personName, personBorn)
+VALUES ('Tommy Wiseau', '1955-01-01'),
+       ('Daniel Radcliffe', '1989-07-23'),
+       ('Jake Gyllenhaal', '1980-12-19'),
+       ('Richard Kelly', '1975-03-28'),
+       ('Micheal Andrews', '1967-11-17');
+
+INSERT INTO movieJobPerson(movieJobPersonPID, movieJobPersonJID, movieJobPersonMID)
+VALUES (1, 1, 4),(1, 2, 4),(1, 3, 4), (2, 2, 1), (4, 1, 3), (5, 4, 3), (3, 3, 2);
+
+SELECT personName, personBorn, movieName, movieYear, jobTitle FROM movie INNER JOIN movieJobPerson mJP on movie.movieId = mJP.movieJobPersonMID
+INNER JOIN job j on mJP.movieJobPersonJID = j.jobId
+INNER JOIN person p on mJP.movieJobPersonPID = p.personId;
+
+CREATE PROCEDURE insertMovieJobPerson(IN imovieJobPersonPID INT, IN imovieJobPersonJID INT, IN imovieJobPersonMID INT)
+  begin
+    INSERT INTO movieJobPerson(movieJobPersonPID, movieJobPersonJID, movieJobPersonMID)
+    VALUES (imovieJobPersonPID, imovieJobPersonJID, imovieJobPersonMID);
+  end;
+
+SELECT * FROM movie;
+SELECT * FROM job;
+SELECT * FROM person;
+SELECT * FROM category;
+
 DROP TABLE movieJobPerson;
 DROP TABLE movieCategory;
 DROP TABLE movie;
@@ -52,3 +100,4 @@ DROP TABLE job;
 DROP TABLE person;
 DROP TABLE category;
 
+DROP DATABASE pcaDB;
