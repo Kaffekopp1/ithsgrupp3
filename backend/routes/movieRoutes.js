@@ -3,6 +3,6 @@ const router = express.Router();
 const movieController = require("../controllers/movieController");
 
 //router.post('/api/categories', categoryController.createCategory);
-// router.get('/api/categories', categoryController.getCategories);
+router.get("/api/categories", movieController.getCategories);
 
 module.exports = router;
