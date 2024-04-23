@@ -13,8 +13,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static("public"));
 
-// const bookRoutes = require("./routes/bookRoutes");
-const categoryRoutes = require("./routes/categoryRoutes");
+const jobRoutes = require('./routes/jobRoutes')
+const movieRoutes = require('./routes/movieRoutes')
+const categoryRoutes = require('./routes/categoryRoutes')
+const personRoutes = require('./routes/personRoutes')
 
 // app.use(bookRoutes);
 app.use(categoryRoutes);

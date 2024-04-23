@@ -23,9 +23,8 @@ exports.getBook = (async (req, res) => {
   try {
     await connectionMySQL.query(sql, [id], (error, results, fields) => {
       if (error) {
-        if (error) throw error;
+        throw error;
       }
-
 
       res.json(results);
     });
