@@ -23,15 +23,13 @@ exports.getCategories = async (req, res) => {
 };
 
 exports.getCategory = async (req, res) => {
+  const { id } = req.params;
   try {
-    const getCategories = await queryDatabase(
-      "SELECT * FROM category WHERE categoryId = ?",
-      [10],
-    );
-    console.log(getCategories);
+    const getCategory = await queryDatabase(sql, [10])
+    sql = 'SELECT categoryName FROM category WHERE title REGEXP "id?"'
 
-    if (getCategories.length > 0) {
-      res.json(getCategories);
+    if (getCategory.length > 0) {
+      res.json(this.getCategory);
     } else {
       res.json({
         error: "Inget resultat",
@@ -42,4 +40,7 @@ exports.getCategory = async (req, res) => {
       error: error.message,
     });
   }
+// movies get
+exports.getMovies = async (req, res) => {
+	res.send("hej");
 };
