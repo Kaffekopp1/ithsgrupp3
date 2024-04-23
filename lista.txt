@@ -1,0 +1,22 @@
+TODO
+// get
+1. Hämta alla filmer. --Peter
+3. Hämta alla skådespelare från specifik film // joint
+4. Söka efter en film - Cissi
+5. Sortera film efter en kategori (visar alla kategorier)
+6. Se vilka filmer en person varit med i(personens sida)
+7. Hämta specifik kategori
+8. Sök(efter film, person, kategorier)
+
+//Post
+1. lägg till film(möjligtvis import från themoviedatabase) - Adam
+2. Lägg till skådespelare i film
+
+
+//Put
+1. ändra beskrivning av film.
+2. ändra bild på person.
+
+// DELETE
+1.Ta bort film
+2. Ta bort person
