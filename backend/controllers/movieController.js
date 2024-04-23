@@ -25,8 +25,9 @@ exports.getCategories = async (req, res) => {
 exports.getCategory = async (req, res) => {
   const { id } = req.params;
   try {
-    const getCategory = await queryDatabase(sql, [10])
-    sql = 'SELECT categoryName FROM category WHERE title REGEXP "id?"'
+    let sql = 'SELECT categoryName FROM category WHERE title REGEXP "id?"';
+
+    const getCategory = await queryDatabase(sql, [10]);
 
     if (getCategory.length > 0) {
       res.json(this.getCategory);
@@ -40,7 +41,8 @@ exports.getCategory = async (req, res) => {
       error: error.message,
     });
   }
+};
 // movies get
 exports.getMovies = async (req, res) => {
-	res.send("hej");
+  res.send("hej");
 };
