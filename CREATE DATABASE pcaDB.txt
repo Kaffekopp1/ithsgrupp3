@@ -1,0 +1,119 @@
+CREATE DATABASE pcaDB;
+use pcaDB;
+
+CREATE TABLE category(
+  categoryId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  categoryName VARCHAR(50)
+);
+
+CREATE TABLE movie(
+  movieId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  movieName VARCHAR(200),
+  movieYear INT,
+  movieDescription VARCHAR(300),
+  moviePoster VARCHAR(300),
+  movieRuntime INT,
+  UNIQUE (movieName, movieYear)
+);
+
+CREATE TABLE job(
+  jobId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  jobTitle VARCHAR(100)
+);
+
+CREATE TABLE person(
+  personId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  personName VARCHAR(100),
+  personBorn DATE,
+  personImg VARCHAR(100),
+  UNIQUE (personName, personBorn)
+);
+
+CREATE TABLE movieCategory(
+  movieCategoryId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  movieCategoryMID INT,
+  movieCategoryCID INT,
+  FOREIGN KEY (movieCategoryMID) REFERENCES movie(movieId),
+  FOREIGN KEY (movieCategoryCID) REFERENCES category(categoryId)
+);
+
+CREATE TABLE movieJobPerson(
+  movieJobPersonId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  movieJobPersonPID INT,
+  movieJobPersonJID INT,
+  movieJobPersonMID INT,
+  FOREIGN KEY (movieJobPersonPID) REFERENCES person(personId),
+  FOREIGN KEY (movieJobPersonJID) REFERENCES job(jobId),
+  FOREIGN KEY (movieJobPersonMID) REFERENCES movie(movieId)
+);
+
+INSERT INTO movie (movieName, movieYear)
+VALUES ('Harry Potter and the Philosopher`s stone', 2001),
+       ('Interstellar', 2014),
+       ('Donnie Darko', 2001),
+       ('The Room', 2003),
+       ('Transformers One', 2024);
+
+INSERT INTO category(categoryName)
+VALUES ('Animation'),
+       ('Action'),
+       ('Adventure'),
+       ('Family'),
+       ('Fantasy'),
+       ('Sci-Fi'),
+       ('Drama'),
+       ('Thriller'),
+       ('Comedy');
+
+INSERT INTO job (jobTitle)
+VALUES ('Director'), ('Actor'), ('Screenwriter'), ('Composer');
+
+INSERT INTO person (personName, personBorn)
+VALUES ('Tommy Wiseau', '1955-01-01'),
+       ('Daniel Radcliffe', '1989-07-23'),
+       ('Jake Gyllenhaal', '1980-12-19'),
+       ('Richard Kelly', '1975-03-28'),
+       ('Micheal Andrews', '1967-11-17');
+
+INSERT INTO movieJobPerson(movieJobPersonPID, movieJobPersonJID, movieJobPersonMID)
+VALUES (1, 1, 4);
+
+SELECT personName, personBorn, movieName, movieYear, jobTitle FROM movie INNER JOIN movieJobPerson mJP on movie.movieId = mJP.movieJobPersonMID
+INNER JOIN job j on mJP.movieJobPersonJID = j.jobId
+INNER JOIN person p on mJP.movieJobPersonPID = p.personId;
+
+CREATE PROCEDURE insertMovieJobPerson(IN imovieJobPersonPID INT, IN imovieJobPersonJID INT, IN imovieJobPersonMID INT)
+  begin
+    INSERT INTO movieJobPerson(movieJobPersonPID, movieJobPersonJID, movieJobPersonMID)
+    VALUES (imovieJobPersonPID, imovieJobPersonJID, imovieJobPersonMID);
+  end;
+
+CREATE PROCEDURE insertMovieStaffWithVar(IN inputPersonName VarChar(50), IN inputJobTitle VARCHAR(50), IN inputMovieName VARCHAR(50))
+    BEGIN
+        DECLARE varPersonId INT;
+        DECLARE varMovieId INT;
+        DECLARE varJobId INT;
+        SELECT personId INTO varPersonId FROM person WHERE personName = inputPersonName;
+        SELECT movieId INTO varMovieId FROM movie WHERE movieName = inputMovieName;
+        SELECT jobId INTO varJobId FROM job WHERE jobTitle = inputJobTitle;
+         INSERT INTO movieJobPerson(movieJobPersonPID, movieJobPersonJID, movieJobPersonMID)
+         VALUES (varPersonId, varMovieId, varJobId);
+    end;
+CALL insertMovieStaffWithVar("Daniel Radcliffe", "Actor", "Donnie Darko");
+
+DROP PROCEDURE IF EXISTS insertMovieStaffWithVar;
+
+SELECT * FROM movie;
+SELECT * FROM job;
+SELECT * FROM person;
+SELECT * FROM category;
+
+DROP TABLE movieJobPerson;
+DROP TABLE movieCategory;
+DROP TABLE movie;
+DROP TABLE job;
+DROP TABLE person;
+DROP TABLE category;
+
+DROP DATABASE pcaDB;
+
