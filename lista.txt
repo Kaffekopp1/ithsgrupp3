@@ -5,7 +5,7 @@ TODO
 4. Söka efter en film - Cissi
 5. Sortera film efter en kategori (visar alla kategorier)
 6. Se vilka filmer en person varit med i(personens sida)
-7. Hämta specifik kategori
+7. Hämta specifik kategori - Cissi
 8. Sök(efter film, person, kategorier)
 
 //Post
@@ -20,3 +20,11 @@ TODO
 // DELETE
 1.Ta bort film
 2. Ta bort person
+
+----- GIT
+
+//Radera en fil
+git rm 'filnamn'
+
+// Byta namn på en fil
+ git mv options oldFilename newFilename
