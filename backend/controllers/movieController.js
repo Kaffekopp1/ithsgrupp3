@@ -1,4 +1,8 @@
-const { connectionMySQL, queryDatabase } = require("../connectionMySQL");
+const {
+  connectionMySQL,
+  queryDatabase,
+  apiKey,
+} = require("../connectionMySQL");
 
 // get all categories
 exports.getCategories = async (req, res) => {
@@ -73,6 +77,67 @@ exports.getMovies = async (req, res) => {
   } catch (e) {
     return res.status(500).json({
       error: e.message,
+    });
+  }
+};
+// get actors from movie
+exports.getActorsMovie = async (req, res) => {
+  const { movie } = req.params;
+  let sql =
+    "SELECT personName, personBorn FROM movie INNER JOIN movieJobPerson mJP on movie.movieId = mJP.movieJobPersonMID INNER JOIN job j on mJP.movieJobPersonJID = j.jobId INNER JOIN person p on mJP.movieJobPersonPID = p.personId WHERE movieName = ? AND jobTitle = 'Actor' ";
+  try {
+    const getActorArray = await queryDatabase(sql, movie);
+    res.json(getActorArray);
+  } catch (e) {
+    return res.status(500).json({
+      error: e.message,
+    });
+  }
+};
+
+// Importera film
+exports.importMovie = async (req, res) => {
+  try {
+    const { tmdbId } = req.params;
+    if (tmdbId) {
+      const getMovieInformation = await fetch(
+        `https://api.themoviedb.org/3/movie/${tmdbId}?language=en-US`,
+        apiKey,
+      );
+      const getMovieResults = await getMovieInformation.json();
+
+      if (getMovieResults.success !== false) {
+        const insertMovie_sql =
+          "INSERT INTO movie (movieName, movieYear, movieDescription, moviePoster, movieRuntime) VALUES (?, ?, ?, ?, ?)";
+        const convertedYear = new Date(
+          getMovieResults.release_date,
+        ).getFullYear();
+        const moviePoster = `https://image.tmdb.org/t/p/w300${getMovieResults.poster_path}`;
+
+        const insertMovie = await queryDatabase(insertMovie_sql, [
+          getMovieResults.title,
+          convertedYear,
+          getMovieResults.overview,
+          moviePoster,
+          getMovieResults.runtime,
+        ]);
+
+        const getCast = await fetch(
+          `https://api.themoviedb.org/3/movie/${tmdbId}?language=en-US`,
+          apiKey,
+        );
+        const getCastResults = await getMovieInformation.json();
+
+        res.json(insertMovie.insertId);
+      } else {
+        res.json({
+          error: "Inget resultat...",
+        });
+      }
+    }
+  } catch (err) {
+    return res.status(500).json({
+      error: err.message,
     });
   }
 };
