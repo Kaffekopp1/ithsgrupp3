@@ -4,18 +4,18 @@ exports.getCategories = async (req, res) => {
   try {
     const getCategories = await queryDatabase("SELECT * FROM category");
 
-    if (getCategories.length > 0) {
-      res.json(getCategories);
-    } else {
-      res.json({
-        error: "Inget resultat",
-      });
-    }
-  } catch (error) {
-    return res.status(500).json({
-      error: error.message,
-    });
-  }
+		if (getCategories.length > 0) {
+			res.json(getCategories);
+		} else {
+			res.json({
+				error: "Inget resultat",
+			});
+		}
+	} catch (error) {
+		return res.status(500).json({
+			error: error.message,
+		});
+	}
 };
 
 exports.getCategory = async (req, res) => {
@@ -39,5 +39,13 @@ exports.getCategory = async (req, res) => {
 
 // movies get
 exports.getMovies = async (req, res) => {
-  res.send("hej");
+	// res.send("hej");
+	try {
+		const getMoviesArray = await queryDatabase("SELECT * From movie");
+		res.json(getMoviesArray);
+	} catch (e) {
+		return res.status(500).json({
+			error: e.message,
+		});
+	}
 };
