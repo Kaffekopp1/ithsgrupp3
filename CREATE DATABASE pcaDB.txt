@@ -10,15 +10,17 @@ CREATE TABLE movie(
   movieId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   movieName VARCHAR(200),
   movieYear INT,
-  movieDescription VARCHAR(300),
+  movieDescription TEXT,
   moviePoster VARCHAR(300),
   movieRuntime INT,
-  UNIQUE (movieName, movieYear)
+  movietmdbId INT,
+  UNIQUE (movietmdbId)
 );
 
 CREATE TABLE job(
   jobId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  jobTitle VARCHAR(100)
+  jobTitle VARCHAR(100),
+  UNIQUE (jobTitle)
 );
 
 CREATE TABLE person(
@@ -26,7 +28,8 @@ CREATE TABLE person(
   personName VARCHAR(100),
   personBorn DATE,
   personImg VARCHAR(100),
-  UNIQUE (personName, personBorn)
+  persontmdbId INT,
+  UNIQUE (persontmdbId)
 );
 
 CREATE TABLE movieCategory(
@@ -47,36 +50,8 @@ CREATE TABLE movieJobPerson(
   FOREIGN KEY (movieJobPersonMID) REFERENCES movie(movieId)
 );
 
-INSERT INTO movie (movieName, movieYear)
-VALUES ('Harry Potter and the Philosopher`s stone', 2001),
-       ('Interstellar', 2014),
-       ('Donnie Darko', 2001),
-       ('The Room', 2003),
-       ('Transformers One', 2024);
-
-INSERT INTO category(categoryName)
-VALUES ('Animation'),
-       ('Action'),
-       ('Adventure'),
-       ('Family'),
-       ('Fantasy'),
-       ('Sci-Fi'),
-       ('Drama'),
-       ('Thriller'),
-       ('Comedy');
-
 INSERT INTO job (jobTitle)
 VALUES ('Director'), ('Actor'), ('Screenwriter'), ('Composer');
-
-INSERT INTO person (personName, personBorn)
-VALUES ('Tommy Wiseau', '1955-01-01'),
-       ('Daniel Radcliffe', '1989-07-23'),
-       ('Jake Gyllenhaal', '1980-12-19'),
-       ('Richard Kelly', '1975-03-28'),
-       ('Micheal Andrews', '1967-11-17');
-
-INSERT INTO movieJobPerson(movieJobPersonPID, movieJobPersonJID, movieJobPersonMID)
-VALUES (1, 1, 4);
 
 SELECT personName, personBorn, movieName, movieYear, jobTitle FROM movie INNER JOIN movieJobPerson mJP on movie.movieId = mJP.movieJobPersonMID
 INNER JOIN job j on mJP.movieJobPersonJID = j.jobId
@@ -87,6 +62,18 @@ CREATE PROCEDURE insertMovieJobPerson(IN imovieJobPersonPID INT, IN imovieJobPer
     INSERT INTO movieJobPerson(movieJobPersonPID, movieJobPersonJID, movieJobPersonMID)
     VALUES (imovieJobPersonPID, imovieJobPersonJID, imovieJobPersonMID);
   end;
+
+  CREATE PROCEDURE deletePerson (IN deletePersonId INT)
+  begin
+    DELETE FROM movieJobPerson WHERE movieJobPersonPID = deletePersonId;
+    DELETE FROM person WHERE personId = deletePersonId;
+end;
+
+  CREATE PROCEDURE deleteMovie (IN deleteMovieId INT)
+  begin
+    DELETE FROM movieJobPerson WHERE movieJobPersonMID = deleteMovieId;
+    DELETE FROM movie WHERE movieId = deleteMovieId;
+end;
 
 CREATE PROCEDURE insertMovieStaffWithVar(IN inputPersonName VarChar(50), IN inputJobTitle VARCHAR(50), IN inputMovieName VARCHAR(50))
     BEGIN
@@ -100,6 +87,22 @@ CREATE PROCEDURE insertMovieStaffWithVar(IN inputPersonName VarChar(50), IN inpu
          VALUES (varPersonId, varMovieId, varJobId);
     end;
 CALL insertMovieStaffWithVar("Daniel Radcliffe", "Actor", "Donnie Darko");
+
+CREATE PROCEDURE searcher (in searchParam VARCHAR(50) )
+    BEGIN
+       SELECT 'movie' AS type, movieName AS name, movieId AS id, moviePoster AS poster FROM movie WHERE movieName Like CONCAT('%',searchParam, '%'  )
+        UNION ALL
+        SELECT 'person' AS type, personName AS name, personId AS id, personImg AS personIMG FROM person WHERE personName LIKE CONCAT('%',searchParam, '%')
+        UNION ALL
+        SELECT 'movie' AS type, movieName AS name, movieId AS id, null FROM movie
+            JOIN movieCategory ON movie.movieId = movieCategory.movieCategoryMID
+            JOIN category ON movieCategory.movieCategoryMID = category.categoryId
+        WHERE categoryName LIKE CONCAT('%', searchParam, '%') LIMIT 10;
+    END;
+
+call  searcher( "jake gyllen");
+
+drop procedure searcher;
 
 DROP PROCEDURE IF EXISTS insertMovieStaffWithVar;
 
@@ -116,4 +119,3 @@ DROP TABLE person;
 DROP TABLE category;
 
 DROP DATABASE pcaDB;
-
