@@ -51,7 +51,22 @@ exports.getMovieBySearch = async (req, res) => {
   }
 };
 
-// search db after person, category and persons obs: only works if procedure "searcher" exists
+// get all movies from specific actor by search
+exports.getActorBySearch = async (req, res) => {
+  const { actor } = req.params;
+  let sql =
+    "SELECT movieName, movieYear, movieId FROM movie INNER JOIN movieJobPerson mJP on movie.movieId = mJP.movieJobPersonMID JOIN job j on mJP.movieJobPersonJID = j.jobId JOIN person p on mJP.movieJobPersonPID = p.personId WHERE personName LIKE CONCAT('%',?,'%') ";
+  try {
+    const getActorArray = await queryDatabase(sql, actor);
+    res.json(getActorArray);
+  } catch (e) {
+    return res.status(500).json({
+      error: e.message,
+    });
+  }
+};
+
+// search db after person, category and movie obs: only works if procedure "searcher" exists
 exports.getFromSearch = async (req, res) => {
   const { keyword } = req.params;
   console.log("keyWord", keyword);

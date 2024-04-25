@@ -8,7 +8,6 @@ const {
 exports.getCategories = async (req, res) => {
   try {
     const getCategories = await queryDatabase("SELECT * FROM category");
-    console.log(getCategories);
 
     if (getCategories.length > 0) {
       res.json(getCategories);
@@ -65,7 +64,7 @@ exports.getMovies = async (req, res) => {
 // delete movie by id
 exports.deleteMovie = async (req, res) => {
   const { id } = req.params;
-  let sql = "DELETE FROM movie WHERE movieId = ?";
+  let sql = "CALL deleteMovie(?)";
 
   if (!id) {
     return res.status(400).json({
@@ -87,4 +86,26 @@ exports.deleteMovie = async (req, res) => {
       error: error.message,
     });
   }
+};
+
+// Ändra beskrvning av film beroende på filmid
+
+exports.changeMovieDescription = async (req, res) => {
+  const { description, movieId } = req.body;
+  let sql = "UPDATE movie SET movieDescription = ? where movieId = ?";
+  try {
+    const newDescription = await queryDatabase(sql, [description, movieId]);
+    return res.status(201).json({
+      success: true,
+      error: "",
+      message: "ny beskrivning inlaggd!",
+      nybeskrivning: description,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+  res.json({ beskrivning: description, id: movieId });
 };
