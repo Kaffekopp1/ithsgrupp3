@@ -61,6 +61,22 @@ exports.getMovies = async (req, res) => {
   }
 };
 
+exports.getSpecificMovie = async (req, res) => {
+  const { movieId } = req.params;
+  let sql =
+    "SELECT m.movieName, m.movieYear, m.movieDescription, m.moviePoster, m.movieRuntime, JSON_ARRAYAGG(JSON_OBJECT('personId', p.personId, 'personName', p.personName, 'jobTitle', j.jobTitle)) AS cast, (SELECT JSON_ARRAYAGG(categoryName) FROM (SELECT DISTINCT c.categoryName FROM category c JOIN movieCategory mc ON c.categoryId = mc.movieCategoryCID WHERE mc.movieCategoryMID = m.movieId) AS distinct_categories) AS categories FROM movie AS m JOIN movieJobPerson AS mjp ON m.movieId = mjp.movieJobPersonMID JOIN person AS p ON mjp.movieJobPersonPID = p.personId JOIN job AS j on mjp.movieJobPersonJID = j.jobId WHERE m.movieId = ?";
+  try {
+    const getMovieArray = await queryDatabase(sql, movieId);
+    if (getMovieArray.length > 0) {
+      res.json(getMovieArray);
+    }
+  } catch (e) {
+    return res.status(500).json({
+      error: e.message,
+    });
+  }
+};
+
 // delete movie by id
 exports.deleteMovie = async (req, res) => {
   const { id } = req.params;
