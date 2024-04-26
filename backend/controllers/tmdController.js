@@ -9,10 +9,10 @@ exports.importMovie = async (req, res) => {
   try {
     const { tmdbId } = req.params;
     if (tmdbId) {
-      const getMovieInformation = await fetch(
-        `https://api.themoviedb.org/3/movie/${tmdbId}?language=en-US`,
-        apiKey,
-      );
+      const [getMovieInformation, getCredits] = await Promise.all([
+        fetch(`https://api.themoviedb.org/3/movie/${tmdbId}?language=en-US`, apiKey),
+        fetch(`https://api.themoviedb.org/3/movie/${tmdbId}/credits?language=en-US`, apiKey)
+      ]);
       const getMovieResults = await getMovieInformation.json();
 
       if (getMovieResults.success !== false) {
@@ -55,12 +55,6 @@ exports.importMovie = async (req, res) => {
           }
         }
 
-        // Sätter in cast & crew
-
-        const getCredits = await fetch(
-          `https://api.themoviedb.org/3/movie/${tmdbId}/credits?language=en-US`,
-          apiKey,
-        );
         const getCreditsResuls = await getCredits.json();
 
         let insertMovieJobPerson_sql =
@@ -117,45 +111,40 @@ exports.importMovie = async (req, res) => {
 
           let currentJobId;
 
-          if (checkIfJobExist.length === 0) {
-            let insertNewJob = await queryDatabase(
-              "INSERT INTO job (jobTitle) VALUES (?)",
-              getCreditsResuls.crew[i].job,
-            );
-            currentJobId = insertNewJob.insertId;
-          } else {
+          if (checkIfJobExist.length === 1) {
+
             currentJobId = checkIfJobExist[0].jobId;
-          }
 
-          let checkPersonIfExist = await queryDatabase(
-            "SELECT personId FROM person WHERE persontmdbId = ?",
-            getCreditsResuls.crew[i].id,
-          );
-          if (checkPersonIfExist.length !== 1) {
-            let insertPerson_sql =
-              "INSERT INTO person (personName, personBorn, personImg, persontmdbId) VALUES (?, ?, ?, ?)";
-            let insertPerson = await queryDatabase(insertPerson_sql, [
-              getPersonInfo.name,
-              getPersonInfo.birthday,
-              getPersonInfo.profile_path,
+            let checkPersonIfExist = await queryDatabase(
+              "SELECT personId FROM person WHERE persontmdbId = ?",
               getCreditsResuls.crew[i].id,
-            ]);
+            );
+            if (checkPersonIfExist.length !== 1) {
+              let insertPerson_sql =
+                "INSERT INTO person (personName, personBorn, personImg, persontmdbId) VALUES (?, ?, ?, ?)";
+              let insertPerson = await queryDatabase(insertPerson_sql, [
+                getPersonInfo.name,
+                getPersonInfo.birthday,
+                getPersonInfo.profile_path,
+                getCreditsResuls.crew[i].id,
+              ]);
 
-            await queryDatabase(insertMovieJobPerson_sql, [
-              insertPerson.insertId,
-              currentJobId,
-              insertMovie.insertId,
-            ]);
-          } else {
-            await queryDatabase(insertMovieJobPerson_sql, [
-              checkPersonIfExist[0].personId,
-              currentJobId,
-              insertMovie.insertId,
-            ]);
+              await queryDatabase(insertMovieJobPerson_sql, [
+                insertPerson.insertId,
+                currentJobId,
+                insertMovie.insertId,
+              ]);
+            } else {
+              await queryDatabase(insertMovieJobPerson_sql, [
+                checkPersonIfExist[0].personId,
+                currentJobId,
+                insertMovie.insertId,
+              ]);
+            }
           }
-        }
 
-        // res.json(insertMovie.insertId);
+        }
+        res.status(200).json({ success: 'Filmen har nu blivit tillagd.' });
       } else {
         res.json({
           error: "Inget resultat...",
