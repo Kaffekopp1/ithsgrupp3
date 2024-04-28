@@ -1,7 +1,7 @@
 const {
 	connectionMySQL,
 	queryDatabase,
-	apiKey,
+	apiKey
 } = require("../connectionMySQL");
 
 // get all actors from a specific movie
@@ -14,7 +14,7 @@ exports.getActorsMovie = async (req, res) => {
 		res.json(getActorArray);
 	} catch (e) {
 		return res.status(500).json({
-			error: e.message,
+			error: e.message
 		});
 	}
 };
@@ -23,14 +23,14 @@ exports.getActorsMovie = async (req, res) => {
 exports.getActorWithmovie = async (req, res) => {
 	const { actorId } = req.params;
 	let sql =
-		"select movieName, movieYear, movieId, movieDescription, moviePoster, personName, personBorn, personImg from movie join movieJobPerson mJP on movie.movieId = mJP.movieJobPersonMID join  person p on p.personId = mJP.movieJobPersonPID where movieJobPersonPID = ? ";
+		"SELECT JSON_ARRAYAGG(JSON_OBJECT( 'movieName', movieName, 'movieyear', movieYear, 'movieid', movieId, 'movieDescription', movieDescription, 'moviePoster', moviePoster)) as movies, JSON_OBJECT('personName', personName, 'personBorn', personBorn, 'personImg',personImg) as actor from movie JOIN movieJobPerson mJP on movie.movieId = mJP.movieJobPersonMID JOIN  person p on p.personId = mJP.movieJobPersonPID where movieJobPersonPID = ? ";
 	try {
 		const actorWithmovies = await queryDatabase(sql, Number(actorId));
 
 		res.json(actorWithmovies);
 	} catch (e) {
 		return res.status(500).json({
-			error: e.message,
+			error: e.message
 		});
 	}
 };
@@ -46,7 +46,7 @@ exports.getActors = async (req, res) => {
 		res.json(getPersonsArray);
 	} catch (e) {
 		return res.status(500).json({
-			error: e.message,
+			error: e.message
 		});
 	}
 };
@@ -59,7 +59,7 @@ exports.deletePerson = async (req, res) => {
 	if (!id) {
 		return res.status(400).json({
 			success: false,
-			error: "Du har inte skrivit in något ID för personen du vill radera!",
+			error: "Du har inte skrivit in något ID för personen du vill radera!"
 		});
 	}
 	try {
@@ -68,12 +68,12 @@ exports.deletePerson = async (req, res) => {
 		return res.status(201).json({
 			success: true,
 			error: "",
-			message: "Personen är raderad!",
+			message: "Personen är raderad!"
 		});
 	} catch (error) {
 		return res.status(500).json({
 			success: false,
-			error: error.message,
+			error: error.message
 		});
 	}
 };
@@ -89,12 +89,12 @@ exports.addJobbTitle = async (req, res) => {
 		return res.status(201).json({
 			success: true,
 			error: "",
-			message: "jobbTitle inlaggt!",
+			message: "jobbTitle inlaggt!"
 		});
 	} catch (error) {
 		return res.status(500).json({
 			success: false,
-			error: error.message,
+			error: error.message
 		});
 	}
 };

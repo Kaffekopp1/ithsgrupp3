@@ -21,12 +21,12 @@ router.post("/api/addJobbTitle", personController.addJobbTitle);
 
 router.get("/api/actor/:actor", searchController.getActorBySearch);
 router.get(
-  "/api/category/search/:search",
-  searchController.getCategoryBySearch,
+	"/api/category/search/:search",
+	searchController.getCategoryBySearch
 );
 router.get(
-  "/api/movies/search/:keyword/:amount",
-  searchController.getMovieBySearch,
+	"/api/movies/search/:keyword/:amount",
+	searchController.getMovieBySearch
 );
 router.get("/api/searcher/:keyword", searchController.getFromSearch);
 

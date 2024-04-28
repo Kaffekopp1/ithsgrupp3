@@ -1,7 +1,7 @@
 const {
 	connectionMySQL,
 	queryDatabase,
-	apiKey,
+	apiKey
 } = require("../connectionMySQL");
 
 // Importera film
@@ -17,7 +17,7 @@ exports.importMovie = async (req, res) => {
 				fetch(
 					`https://api.themoviedb.org/3/movie/${tmdbId}/credits?language=en-US`,
 					apiKey
-				),
+				)
 			]);
 			const getMovieResults = await getMovieInformation.json();
 
@@ -34,7 +34,7 @@ exports.importMovie = async (req, res) => {
 					getMovieResults.overview,
 					getMovieResults.poster_path,
 					getMovieResults.runtime,
-					tmdbId,
+					tmdbId
 				]);
 
 				// Sätter in kategorier för en film
@@ -85,19 +85,19 @@ exports.importMovie = async (req, res) => {
 							getPersonInfo.name,
 							getPersonInfo.birthday,
 							getPersonInfo.profile_path,
-							getCreditsResuls.cast[i].id,
+							getCreditsResuls.cast[i].id
 						]);
 
 						await queryDatabase(insertMovieJobPerson_sql, [
 							insertPerson.insertId,
 							2,
-							insertMovie.insertId,
+							insertMovie.insertId
 						]);
 					} else {
 						await queryDatabase(insertMovieJobPerson_sql, [
 							checkPersonIfExist[0].personId,
 							2,
-							insertMovie.insertId,
+							insertMovie.insertId
 						]);
 					}
 				}
@@ -131,19 +131,19 @@ exports.importMovie = async (req, res) => {
 								getPersonInfo.name,
 								getPersonInfo.birthday,
 								getPersonInfo.profile_path,
-								getCreditsResuls.crew[i].id,
+								getCreditsResuls.crew[i].id
 							]);
 
 							await queryDatabase(insertMovieJobPerson_sql, [
 								insertPerson.insertId,
 								currentJobId,
-								insertMovie.insertId,
+								insertMovie.insertId
 							]);
 						} else {
 							await queryDatabase(insertMovieJobPerson_sql, [
 								checkPersonIfExist[0].personId,
 								currentJobId,
-								insertMovie.insertId,
+								insertMovie.insertId
 							]);
 						}
 					}
@@ -151,13 +151,13 @@ exports.importMovie = async (req, res) => {
 				res.status(200).json({ success: "Filmen har nu blivit tillagd." });
 			} else {
 				res.json({
-					error: "Inget resultat...",
+					error: "Inget resultat..."
 				});
 			}
 		}
 	} catch (err) {
 		return res.status(500).json({
-			error: err.message,
+			error: err.message
 		});
 	}
 };
