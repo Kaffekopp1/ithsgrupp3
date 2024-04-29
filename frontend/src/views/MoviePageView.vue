@@ -12,7 +12,7 @@ const getMovieData = async () => {
   try {
     const movies = await fetch(`http://localhost:3000/api/specificMovie/${movieId}`);
 
-    const movieData = await movies.json();
+    const movieData1 = await movies.json();
 
     movieData1.value = movieData[0];
     console.log(movieData)
@@ -29,8 +29,7 @@ getMovieData()
 <h1> {{ movieData1.movieName }} </h1>
 <img :src="'https://image.tmdb.org/t/p/w500' + movieData1.moviePoster"> 
 <Router-link to="/"><b-button variant="outline-dark">Back</b-button></Router-link>
-<p> {{ movieData1.movieDescription }} </p>
-<li v-for="actor in movieData1"> {{ actor.crew[0].jobTitle }} </li>
+<p> {{ movieData1.movieName }} </p>
 </main>
 </template>
 
