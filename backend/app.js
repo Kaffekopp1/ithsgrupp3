@@ -17,5 +17,7 @@ const movieRoutes = require("./routes/movieRoutes");
 
 // app.use(bookRoutes);
 app.use(movieRoutes);
+const connectionMongoDB = require("./connectionMongoDB");
+connectionMongoDB();
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

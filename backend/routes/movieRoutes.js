@@ -4,6 +4,7 @@ const movieController = require("../controllers/movieController");
 const personController = require("../controllers/personController");
 const searchController = require("../controllers/searchController");
 const tmdController = require("../controllers/tmdController");
+const reviewController = require("../controllers/reviewController");
 
 //router.post('/api/categories', categoryController.createCategory);
 router.get("/api/categories", movieController.getCategories);
@@ -31,5 +32,9 @@ router.get(
 router.get("/api/searcher/:keyword", searchController.getFromSearch);
 
 router.get("/api/importMovie/:tmdbId", tmdController.importMovie);
+
+// reviews
+router.post("/api/reviews/createReview", reviewController.createReview);
+router.get("/api/reviews/getreviews/:movieId", reviewController.getReview);
 
 module.exports = router;
