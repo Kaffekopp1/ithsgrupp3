@@ -88,7 +88,7 @@ watch(
 					top></b-card-img>
 				<b-card-img
 					v-else
-					:src="`https://image.tmdb.org/t/p/w500/mZ4gBdfkhP9tvLH1DO4m4HYtiyi.jpg`"
+					:src="`https://placehold.co/200x300/212529/FFF?text=?`"
 					alt="Image"
 					top></b-card-img>
 				<div v-for="movie in actor?.movies">
