@@ -23,7 +23,7 @@ exports.getActorsMovie = async (req, res) => {
 exports.getActorWithmovie = async (req, res) => {
 	const { actorId } = req.params;
 	let sql =
-		"SELECT JSON_ARRAYAGG(JSON_OBJECT( 'movieName', movieName, 'movieyear', movieYear, 'movieid', movieId, 'movieDescription', movieDescription, 'moviePoster', moviePoster)) as movies, JSON_OBJECT('personName', personName, 'personBorn', personBorn, 'personImg',personImg) as actor from movie JOIN movieJobPerson mJP on movie.movieId = mJP.movieJobPersonMID JOIN  person p on p.personId = mJP.movieJobPersonPID where movieJobPersonPID = ? ";
+		"SELECT JSON_ARRAYAGG(JSON_OBJECT( 'movieName', movieName, 'movieYear', movieYear, 'movieId', movieId, 'movieDescription', movieDescription, 'moviePoster', moviePoster)) as movies, JSON_OBJECT('personName', personName, 'personBorn', personBorn, 'personImg',personImg) as actor from movie JOIN movieJobPerson mJP on movie.movieId = mJP.movieJobPersonMID JOIN  person p on p.personId = mJP.movieJobPersonPID where movieJobPersonPID = ? ";
 	try {
 		const actorWithmovies = await queryDatabase(sql, Number(actorId));
 
