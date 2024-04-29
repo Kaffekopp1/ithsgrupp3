@@ -12,6 +12,7 @@ const showSearch = ref(false);
 console.log(route.params.personId);
 
 async function getPerson() {
+<<<<<<< HEAD
   try {
     let response = await fetch(
       `http://127.0.0.1:3000/api/actorWithmovie/${route.params.personId}`
@@ -24,6 +25,24 @@ async function getPerson() {
   } catch (error) {
     console.log("error", error);
   }
+=======
+	try {
+		let response = await fetch(
+			`http://127.0.0.1:3000/api/actorWithmovie/${route.params.personId}`
+		);
+		let data = await response.json();
+		if (response.ok) {
+			personMovies.value = JSON.parse(data[0].movies);
+			personArr.value = JSON.parse(data[0].actor);
+			// personArr.value = JSON.parse(data[0].actor;
+			console.log(data);
+		} else {
+			console.log("data", data);
+		}
+	} catch (error) {
+		console.log("error", error);
+	}
+>>>>>>> 67aea57 (blabla)
 }
 getPerson();
 
