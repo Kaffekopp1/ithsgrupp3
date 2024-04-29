@@ -1,7 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 const movieDataV = ref(null)
+const router = useRouter()
 
 const getMovies = async () => {
   try {
@@ -16,6 +18,10 @@ const getMovies = async () => {
   }
 }
 
+const goToMovie = (id) => {
+  router.push('/movie/' + id)
+}
+
 // onMounted(getMovies);
 getMovies();
 </script>
@@ -24,7 +30,7 @@ getMovies();
     <b-row>
       <b-col class="d-flex flex-column" style="border: 1px solid black;">
         <ul v-if="movieDataV" class="d-flex flex-row gap-1 flex-wrap">
-          <li v-for="movie in movieDataV" class="w-25">
+          <li v-for="movie in movieDataV" class="w-25" @click="goToMovie(movie.movieId)">
             <img :src="'https://image.tmdb.org/t/p/w500' + movie.moviePoster" alt="" class="img-fluid">
             <p>{{ movie.movieName }}</p>
           </li>
