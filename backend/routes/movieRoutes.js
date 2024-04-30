@@ -36,5 +36,6 @@ router.get("/api/importMovie/:tmdbId", tmdController.importMovie);
 // reviews
 router.post("/api/reviews/createReview", reviewController.createReview);
 router.get("/api/reviews/getreviews/:movieId", reviewController.getReview);
+router.get("/api/reviews/getReviewAvg/:movieId", reviewController.getReviewAvg);
 
 module.exports = router;

@@ -22,21 +22,6 @@ exports.getCategories = async (req, res) => {
 		});
 	}
 };
-exports.test = async (req, res) => {
-	try {
-		console.log("kalas");
-		const test = await fetch(`http://localhost:3000/api/movies/10`);
-		const l = await test.json();
-		console.log("rgagra", l);
-		res.json({
-			error: "resultat"
-		});
-	} catch (error) {
-		return res.status(500).json({
-			error: error.message
-		});
-	}
-};
 
 // get category by Id
 exports.getCategory = async (req, res) => {
@@ -138,5 +123,5 @@ exports.changeMovieDescription = async (req, res) => {
 			error: error.message
 		});
 	}
-	res.json({ beskrivning: description, id: movieId });
+	// res.json({ beskrivning: description, id: movieId });
 };

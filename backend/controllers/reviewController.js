@@ -33,3 +33,27 @@ exports.getReview = async (req, res) => {
 		});
 	}
 };
+
+exports.getReviewAvg = async (req, res) => {
+	console.log("getReviewAvg", req.params.movieId);
+	let movieId = Number(req.params.movieId);
+	try {
+		const movieReviewavg = await ReviewModel.aggregate([
+			{
+				$match: { reviewMovieId: movieId }
+			},
+			{
+				$group: {
+					_id: "$reviewMovieId",
+					avgAmount: { $avg: "$reviewRating" }
+				}
+			}
+		]);
+		return res.status(200).json(movieReviewavg);
+	} catch (error) {
+		return res.status(500).json({
+			error: error.message
+		});
+	}
+	res.send("getReviewAvg");
+};
