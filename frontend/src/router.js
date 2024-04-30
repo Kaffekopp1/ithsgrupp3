@@ -9,6 +9,7 @@ const router = createRouter({
 	history: createWebHistory(),
 	routes: [
 		{
+			name: 'Home',
 			path: "/",
 			component: StartPageView
 		},
