@@ -22,23 +22,36 @@ const goToMovie = (id) => {
   router.push('/movie/' + id)
 }
 
-// onMounted(getMovies);
 getMovies();
 </script>
 <template>
-  <b-container fluid="lg" class="mt-2">
-    <b-row>
-      <b-col class="d-flex flex-column" style="border: 1px solid black;">
-        <ul v-if="movieDataV" class="d-flex flex-row gap-1 flex-wrap">
-          <li v-for="movie in movieDataV" class="w-25" @click="goToMovie(movie.movieId)">
-            <img :src="'https://image.tmdb.org/t/p/w500' + movie.moviePoster" alt="" class="img-fluid">
-            <p>{{ movie.movieName }}</p>
-          </li>
-        </ul>
-        <div class="text-center mb-3" v-else>
-          <b-spinner class="color-text-custom" label="Loading..."></b-spinner>
+  <b-container fluid="lg" class="d-flex flex-column mt-2 gap-4">
+    <h4 class="mb-6">FILMER 🎬 📹🎥 📽️</h4>
+    <b-row v-if="movieDataV" cols="2" cols-sm="3" cols-md="4" cols-lg="6">
+      <b-col class="d-flex flex-column" v-for="movie in movieDataV">
+        <div @click="goToMovie(movie.movieId)" class="movie-container">
+          <div class="img-wrapper">
+            <img :src="'https://image.tmdb.org/t/p/w300' + movie.moviePoster" alt="" class="img-fluid">
+          </div>
+          <p class="fs">{{ movie.movieName }} ({{ movie.movieYear }})</p>
         </div>
       </b-col>
     </b-row>
+    <div class="text-center mb-3" v-else>
+      <b-spinner class="color-text-custom" label="Loading..."></b-spinner>
+    </div>
   </b-container>
 </template>
+<style scoped>
+ul {
+  list-style-type: none;
+}
+
+.movie-container:hover {
+  cursor: pointer;
+}
+
+.img-wrapper {
+  max-width: 191px;
+}
+</style>
