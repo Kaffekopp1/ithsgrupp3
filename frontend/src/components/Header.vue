@@ -5,11 +5,11 @@
 <template>
   <b-container fluid="lg" class="mt-2 mb-3">
     <b-navbar toggleable="lg" type="white" variant="white">
-      <b-navbar-brand href="#" class="fs-3">PCA</b-navbar-brand>
+      <b-navbar-brand to="/" class="fs-3">PCA</b-navbar-brand>
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
       <b-collapse id="nav-collapse" class="justify-content-between" is-nav>
         <b-navbar-nav class="fs-5 mt-1">
-          <b-nav-item>🏠 Hem</b-nav-item>
+          <b-nav-item to="/">🏠 Hem</b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="gap-1">
           <b-nav-form class="gap-1">
