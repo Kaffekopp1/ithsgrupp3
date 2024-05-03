@@ -6,7 +6,6 @@ const searchController = require("../controllers/searchController");
 const tmdController = require("../controllers/tmdController");
 const reviewController = require("../controllers/reviewController");
 
-//router.post('/api/categories', categoryController.createCategory);
 router.get("/api/categories", movieController.getCategories);
 router.get("/api/category/:id", movieController.getCategory);
 router.delete("/api/delete/movie/:id", movieController.deleteMovie);
@@ -45,5 +44,6 @@ router.get("/api/importMovie/:tmdbId", tmdController.importMovie);
 router.post("/api/reviews/createReview", reviewController.createReview);
 router.get("/api/reviews/getreviews/:movieId", reviewController.getReview);
 router.get("/api/reviews/getReviewAvg/:movieId", reviewController.getReviewAvg);
+router.delete("/api/reviews/deleteReview/:reviewId", reviewController.deleteReview)
 
 module.exports = router;

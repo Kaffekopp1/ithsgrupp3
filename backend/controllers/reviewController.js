@@ -1,7 +1,6 @@
 const ReviewModel = require("../models/reviewModel");
 
 exports.createReview = async (req, res) => {
-	console.log("hej", req.body.movieId);
 	const { reviewerName, reviewComment, reviewRating, reviewMovieId } = req.body;
 	console.log(reviewerName, reviewComment, reviewRating, reviewMovieId);
 	try {
@@ -20,8 +19,19 @@ exports.createReview = async (req, res) => {
 	}
 };
 
+exports.deleteReview = async (req, res) => {
+	const {reviewId} = req.body
+	try {
+		const deletedReview = await ReviewModel.deleteOne({id : reviewId})
+		return res.status(200).json(deletedReview)
+	} catch (error) {
+		return res.status(500).json({
+			error: error.message
+		})
+	}
+}
+
 exports.getReview = async (req, res) => {
-	console.log("hej", req.params.movieId);
 	try {
 		const movieReview = await ReviewModel.find({
 			reviewMovieId: req.params.movieId
@@ -35,7 +45,6 @@ exports.getReview = async (req, res) => {
 };
 
 exports.getReviewAvg = async (req, res) => {
-	console.log("getReviewAvg", req.params.movieId);
 	let movieId = Number(req.params.movieId);
 	try {
 		const movieReviewavg = await ReviewModel.aggregate([
@@ -55,5 +64,4 @@ exports.getReviewAvg = async (req, res) => {
 			error: error.message
 		});
 	}
-	res.send("getReviewAvg");
 };
