@@ -14,10 +14,14 @@ app.use(cors());
 app.use(express.static("public"));
 
 const movieRoutes = require("./routes/movieRoutes");
+const authRoutes = require("./routes/authRoutes")
+const protectedRoutes = require('./routes/protectedRoutes')
 
-// app.use(bookRoutes);
 app.use(movieRoutes);
 const connectionMongoDB = require("./connectionMongoDB");
 connectionMongoDB();
+
+app.use(authRoutes)
+app.use(protectedRoutes)
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
