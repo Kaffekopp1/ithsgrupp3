@@ -74,19 +74,19 @@ const message = ref(null)
 <hr>
 <p> Year : {{ movieData1.movieYear }} </p>
 <p> Runtime : {{ movieData1.movieRuntime }} </p>
+<Router-link to="/"><b-button variant="outline-dark">Back to Startpage</b-button></Router-link>
 <hr>
 </div>
 <div class="form">
   <div class="message" v-if="message">Thanks for your review!</div>
   <form method="POST" id="reviewForm">
-    <input type="text" v-model="reviewerName">
-    <input type="text" v-model="reviewComment">
-    <input type="number" v-model="reviewRating">
-    <input type="submit" value="Send Review" @click="postReview">
+    Name: <input type="text" v-model="reviewerName">
+    Comment: <input type="text" v-model="reviewComment">
+    Rating: <input type="number" v-model="reviewRating">
+    <input id="submit" type="submit" value="Send Review" @click="postReview">
   </form>
 </div>
 <div class="outer-container">
-  <Router-link to="/"><b-button variant="outline-dark">Back</b-button></Router-link>
 <h6> Categories : </h6>
 <li v-for="category in movieData1.categories"> {{ category }} </li>
 <hr>
@@ -124,13 +124,27 @@ margin: 20px;
   align-items: center;
 }
 
+.form {
+  margin: 20px;
+}
+
+#submit {
+  margin-top: 20px;
+}
+
 .outer-container {
+  margin: 20px;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 img {
   max-width: 350px;  
+}
+
+h6 {
+  border-bottom: solid black 2px;
 }
 
 .reviews-container {
@@ -138,6 +152,10 @@ img {
   padding: 15px;
   box-shadow: 20px 20px;
   margin: 20px;
+}
+
+.review-container {
+  border-bottom: solid black 1px;
 }
 
 </style>
