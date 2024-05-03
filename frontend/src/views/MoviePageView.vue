@@ -158,4 +158,8 @@ h6 {
   border-bottom: solid black 1px;
 }
 
+.cast-container {
+  overflow-y: scroll; height:400px;
+}
+
 </style>
