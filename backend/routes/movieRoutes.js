@@ -17,8 +17,15 @@ router.get("/api/specificMovie/:movieId", movieController.getSpecificMovie);
 router.get("/api/actorWithmovie/:actorId", personController.getActorWithmovie);
 router.get("/api/actors/:amount", personController.getActors);
 router.get("/api/moviesactor/:movie", personController.getActorsMovie);
+router.get("/api/jobtitles/", personController.getJobTitle);
 router.delete("/api/delete/crew/:id", personController.deletePerson);
 router.post("/api/addJobbTitle", personController.addJobbTitle);
+
+router.post("/api/addMovieToPerson/", personController.addMovieToPerson);
+router.get(
+	"/api/changeChangeName/:personName/:personId",
+	personController.changeChangeName
+);
 
 router.get("/api/actor/:actor", searchController.getActorBySearch);
 router.get(
@@ -29,6 +36,7 @@ router.get(
 	"/api/movies/search/:keyword/:amount",
 	searchController.getMovieBySearch
 );
+
 router.get("/api/searcher/:keyword", searchController.getFromSearch);
 
 router.get("/api/importMovie/:tmdbId", tmdController.importMovie);

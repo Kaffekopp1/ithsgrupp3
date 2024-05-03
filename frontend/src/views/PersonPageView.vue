@@ -14,7 +14,7 @@ console.log(route.params.personId);
 async function getPerson() {
 	try {
 		let response = await fetch(
-			`http://127.0.0.1:3000/api/actorWithmovie/${route.params.personId}`
+			`http://127.0.0.1:3000/api/actorWithmovie/${personId.value}`
 		);
 		let data = await response.json();
 
@@ -34,12 +34,7 @@ async function searchActor() {
 		);
 		if (response.ok) {
 			let data = await response.json();
-			let actorTempArr = data;
-			for (let i = 0; i < actorTempArr.length; i++) {
-				console.log(actorTempArr[i].movies);
-				actorTempArr[i].movies = actorTempArr[i].movies;
-			}
-			ActorSeachedoutput.value = actorTempArr;
+			ActorSeachedoutput.value = data;
 			showSearch.value = true;
 		} else {
 			ActorSeachedoutput.value = [];

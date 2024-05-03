@@ -23,7 +23,7 @@ exports.getActorsMovie = async (req, res) => {
 exports.getActorWithmovie = async (req, res) => {
 	const { actorId } = req.params;
 	let sql =
-		"SELECT JSON_ARRAYAGG(JSON_OBJECT( 'movieName', movieName, 'movieYear', movieYear, 'movieId', movieId, 'movieDescription', movieDescription, 'moviePoster', moviePoster)) as movies, JSON_OBJECT('personName', personName, 'personBorn', personBorn, 'personImg',personImg) as actor from movie JOIN movieJobPerson mJP on movie.movieId = mJP.movieJobPersonMID JOIN  person p on p.personId = mJP.movieJobPersonPID where movieJobPersonPID = ? ";
+		"SELECT JSON_ARRAYAGG(JSON_OBJECT( 'movieName', movieName, 'movieYear', movieYear, 'movieId', movieId, 'movieDescription', movieDescription, 'jobTitle', jobTitle, 'jobId', jobId,'moviePoster', moviePoster)) as movies,JSON_OBJECT('personName', personName, 'personBorn', personBorn, 'personImg',personImg) as actor from movie JOIN movieJobPerson mJP on movie.movieId = mJP.movieJobPersonMID JOIN job on mJP.movieJobPersonJID = job.jobId JOIN  person p on p.personId = mJP.movieJobPersonPID where movieJobPersonPID = ?";
 	try {
 		const actorWithmovies = await queryDatabase(sql, Number(actorId));
 
@@ -95,6 +95,63 @@ exports.addJobbTitle = async (req, res) => {
 		return res.status(500).json({
 			success: false,
 			error: error.message
+		});
+	}
+};
+
+exports.addMovieToPerson = async (req, res) => {
+	let sql =
+		"INSERT INTO movieJobPerson (movieJobPersonPID,movieJobPersonJID,movieJobPersonMID) VALUES(?,?,?)";
+	const { personId, jobbId, movieId } = req.body;
+	console.log("adderJobb", personId, jobbId, movieId);
+	try {
+		const addTheMovietoPerson = await queryDatabase(sql, [
+			personId,
+			jobbId,
+			movieId
+		]);
+		return res.status(201).json({
+			success: true,
+			error: "",
+			message: "movie inlaggt!"
+		});
+	} catch (error) {
+		return res.status(500).json({
+			success: false,
+			error: error.message
+		});
+	}
+
+	console.log("jobb", personId, jobbId, movieId);
+	console.log("jobb", req.body);
+	res.send("framme i add movie");
+};
+
+exports.getJobTitle = async (req, res) => {
+	try {
+		const jobTitle = await queryDatabase("SELECT * FROM job");
+		res.json(jobTitle);
+	} catch (e) {
+		return res.status(500).json({
+			error: e.message
+		});
+	}
+};
+
+exports.changeChangeName = async (req, res) => {
+	const { personName, personId } = req.params;
+	console.log("");
+	let personIdN = Number(personId);
+	console.log("personId", personId, personIdN);
+	try {
+		const jobTitle = await queryDatabase(
+			"UPDATE person set personName = ?  WHERE personId = ?",
+			[personName, personIdN]
+		);
+		res.json(jobTitle);
+	} catch (e) {
+		return res.status(500).json({
+			error: e.message
 		});
 	}
 };
