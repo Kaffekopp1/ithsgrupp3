@@ -83,7 +83,6 @@ async function importMovie() {
 
     const importMovie = await fetch(`http://localhost:3000/api/importMovie/${tmdbId.value}`);
     const response = await importMovie.json();
-    console.log(response, "KING")
     if (response.success) {
       tmdbId.value = ''
       importMsg.value = 'ALLT GICK BRA !!'
@@ -140,7 +139,6 @@ async function importMovie() {
       <b-col class="d-flex flex-column">
         <b-button variant="primary" class="my-2 my-sm-0" type="button" @click="importMovie()">Importera 🧑‍🎓</b-button>
       </b-col>
-
     </b-row>
   </b-modal>
 </template>
