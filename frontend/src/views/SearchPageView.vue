@@ -12,7 +12,6 @@ async function getSearchResults() {
   try {
     const getSearch = await fetch(`http://localhost:3000/api/searcher/${keyword.value}`);
     const getAllResults = await getSearch.json();
-    console.log(getAllResults)
     SearchArr.value = getAllResults[0];
   } catch {
 

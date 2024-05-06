@@ -6,6 +6,7 @@ const router = useRoute();
 const movieId = router.params.movieId;
 const movieData1 = ref(null);
 const reviewData = ref(null);
+const avgData1 = ref(false);
 
 const getMovieData = async () => {
   try {
@@ -27,11 +28,25 @@ const getReviews = async () => {
     const review = await reviews.json();
 
     reviewData.value = review;
-    console.log(reviewData);
   } catch (error) { }
 };
 
 getReviews();
+
+const getAvgRating = async () => {
+  try {
+    const avg = await fetch(
+      `http://localhost:3000/api/reviews/getReviewAvg/${movieId}`
+    );
+    const avgData = await avg.json();
+    if (avgData.length > 0) {
+      avgData1.value = avgData[0];
+    } else {
+      avgData1.value = false
+    }
+  } catch (e) { }
+};
+getAvgRating();
 
 const reviewerName = ref(null);
 const reviewComment = ref(null);
@@ -60,14 +75,17 @@ async function postReview(event) {
       }) // body data type must match "Content-Type" header
     }
   );
+  const responsemsg = await response.json();
   if (response.ok) {
-    message.value = true;
+    message.value = responsemsg.msg;
     getReviews();
     reviewerName.value = "";
     reviewComment.value = "";
     reviewRating.value = "";
+    getAvgRating();
+  } else {
+    message.value = responsemsg.msg;
   }
-  return response.json();
 }
 </script>
 
@@ -79,12 +97,13 @@ async function postReview(event) {
         <img :src="'https://image.tmdb.org/t/p/w500' + movieData1.moviePoster" />
         <hr />
         <p>Year : {{ movieData1.movieYear }}</p>
-        <p>Runtime : {{ movieData1.movieRuntime }}</p>
+        <p>Runtime : {{ movieData1.movieRuntime }} min</p>
+        <p v-if="avgData1.avgAmount">Rating: {{ avgData1.avgAmount }}</p>
         <Router-link to="/"><b-button variant="outline-dark">Back to Startpage</b-button></Router-link>
         <hr />
       </div>
       <div class="form">
-        <div class="message" v-if="message">Thanks for your review!</div>
+        <div class="message" v-if="message">{{ message }}</div>
         <form method="POST" id="reviewForm">
           Name: <input type="text" v-model="reviewerName" /> Comment:
           <input type="text" v-model="reviewComment" /> Rating:
