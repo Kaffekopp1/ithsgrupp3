@@ -31,6 +31,8 @@ const getReviews = async () => {
   } catch (error) { }
 };
 
+getReviews();
+
 const reviewerName = ref(null);
 const reviewComment = ref(null);
 const reviewRating = ref(null);
@@ -163,7 +165,7 @@ h6 {
 }
 
 .cast-container {
-  overflow-y: scroll; height:400px;
+  overflow-y: scroll;
+  height: 400px;
 }
-
 </style>
