@@ -8,6 +8,7 @@ import PersonPageView from "./views/PersonPageView.vue";
 import SearchPageView from "./views/SearchPageView.vue";
 import LoginPageView from "./views/LoginView.vue";
 import LogoutPageView from "./views/LogoutView.vue";
+import RegisterPageView from "./views/RegisterPageView.vue"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -24,6 +25,11 @@ const router = createRouter({
         requiresAuth: true
       }
     },
+		{
+			name: "Register",
+			path: "/registeruser",
+			component: RegisterPageView
+		},
     {
       name: "login",
       path: "/login",
