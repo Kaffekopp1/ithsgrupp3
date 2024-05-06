@@ -81,11 +81,9 @@ exports.deletePerson = async (req, res) => {
 // lägg till jobbtitle
 exports.addJobbTitle = async (req, res) => {
 	const { jobb } = req.body;
-	console.log("jobb", jobb);
 	let sql = "INSERT INTO job (jobTitle) VALUES (?)";
 	try {
 		const adderJobb = await queryDatabase(sql, jobb);
-		console.log("adderJobb", adderJobb);
 		return res.status(201).json({
 			success: true,
 			error: "",
@@ -103,7 +101,7 @@ exports.addMovieToPerson = async (req, res) => {
 	let sql =
 		"INSERT INTO movieJobPerson (movieJobPersonPID,movieJobPersonJID,movieJobPersonMID) VALUES(?,?,?)";
 	const { personId, jobbId, movieId } = req.body;
-	console.log("adderJobb", personId, jobbId, movieId);
+
 	try {
 		const addTheMovietoPerson = await queryDatabase(sql, [
 			personId,
@@ -121,10 +119,6 @@ exports.addMovieToPerson = async (req, res) => {
 			error: error.message
 		});
 	}
-
-	console.log("jobb", personId, jobbId, movieId);
-	console.log("jobb", req.body);
-	res.send("framme i add movie");
 };
 
 exports.getJobTitle = async (req, res) => {
@@ -140,9 +134,7 @@ exports.getJobTitle = async (req, res) => {
 
 exports.changeChangeName = async (req, res) => {
 	const { personName, personId } = req.params;
-	console.log("");
 	let personIdN = Number(personId);
-	console.log("personId", personId, personIdN);
 	try {
 		const jobTitle = await queryDatabase(
 			"UPDATE person set personName = ?  WHERE personId = ?",
@@ -152,6 +144,29 @@ exports.changeChangeName = async (req, res) => {
 	} catch (e) {
 		return res.status(500).json({
 			error: e.message
+		});
+	}
+};
+
+exports.deleteMovieFromPerson = async (req, res) => {
+	const { personId, jobId, movieId } = req.body;
+	let sql =
+		"DELETE FROM movieJobPerson WHERE movieJobPersonPID = '?' AND movieJobPersonJID = '?' AND movieJobPersonMID = '?'";
+	try {
+		const addTheMovietoPerson = await queryDatabase(sql, [
+			Number(personId),
+			Number(jobId),
+			Number(movieId)
+		]);
+		return res.status(201).json({
+			success: true,
+			error: "",
+			message: "Filmen borttagen ifrån personen"
+		});
+	} catch (error) {
+		return res.status(500).json({
+			success: false,
+			error: error.message
 		});
 	}
 };

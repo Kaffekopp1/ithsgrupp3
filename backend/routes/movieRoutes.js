@@ -14,6 +14,7 @@ router.put("/api/changeDescription/", movieController.changeMovieDescription);
 router.get("/api/specificMovie/:movieId", movieController.getSpecificMovie);
 
 router.get("/api/actorWithmovie/:actorId", personController.getActorWithmovie);
+router.delete("/api/moviefromactor/", personController.deleteMovieFromPerson);
 router.get("/api/actors/:amount", personController.getActors);
 router.get("/api/moviesactor/:movie", personController.getActorsMovie);
 router.get("/api/jobtitles/", personController.getJobTitle);
@@ -44,6 +45,9 @@ router.get("/api/importMovie/:tmdbId", tmdController.importMovie);
 router.post("/api/reviews/createReview", reviewController.createReview);
 router.get("/api/reviews/getreviews/:movieId", reviewController.getReview);
 router.get("/api/reviews/getReviewAvg/:movieId", reviewController.getReviewAvg);
-router.delete("/api/reviews/deleteReview/:reviewId", reviewController.deleteReview)
+router.delete(
+	"/api/reviews/deleteReview/:reviewId",
+	reviewController.deleteReview
+);
 
 module.exports = router;

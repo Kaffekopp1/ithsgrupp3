@@ -45,7 +45,6 @@ async function getCategory() {
 	try {
 		let response = await fetch(`http://127.0.0.1:3000/api/jobtitles/`);
 		let data = await response.json();
-		console.log(data);
 		categorys.value = data;
 	} catch (error) {
 		console.log("error", error);
@@ -77,18 +76,11 @@ async function searchMovie() {
 	}
 }
 async function addMovieToPerson(moviein) {
-	console.log(
-		"hej",
-		moviein.movieId,
-		Number(personId.value),
-		moviein.selectedCategory.jobId
-	);
 	let body = {
 		personId: Number(personId.value),
 		jobbId: moviein.selectedCategory.jobId,
 		movieId: moviein.movieId
 	};
-	console.log(body);
 	try {
 		let response = await fetch(`http://127.0.0.1:3000/api/addMovieToPerson`, {
 			method: "POST",
@@ -98,10 +90,22 @@ async function addMovieToPerson(moviein) {
 		console.log("response", response);
 		if (response.ok) {
 			let data = await response.json();
-			console.log("data");
 		} else {
-			console.log("hejsan");
+			console.log("response icke ok");
 		}
+	} catch (error) {
+		console.log("error", error);
+	}
+}
+async function deleteMovieFromActor(movieId, jobbId) {
+	let body = { movieId: movieId, jobId: jobbId, personId: personId.value };
+	try {
+		let response = await fetch(`http://127.0.0.1:3000/api/moviefromactor`, {
+			method: "DELETE",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(body)
+		});
+		console.log("response", response);
 	} catch (error) {
 		console.log("error", error);
 	}
@@ -111,70 +115,76 @@ getPerson();
 getCategory();
 </script>
 <template setup>
-	<div
-		class="d-flex justify-content-center align-items-center flex-column"
-		v-if="personArr?.personName">
-		<h1>Admin för {{ personArr?.personName }}</h1>
-		<input type="text" v-model="Nname" />
-		{{ Nname }}
-		<button @click="changeName">change name</button>
-		<img
-			style="max-width: 20rem"
-			:src="`https://image.tmdb.org/t/p/w500${personArr.personImg}`" />
-		<p>
-			{{ personArr.personBorn }}
-		</p>
-		<p>Filmer med {{ personArr.personName }}:</p>
-		<div>Lägg till film</div>
-		<div>
-			<b-form-input
-				class="mr-sm-1"
-				placeholder="Sök efter en film att lägga till"
-				v-model="movieSeacheInput"
-				required></b-form-input>
-			<b-button
-				variant="primary"
-				class="my-2 my-sm-0"
-				type="submit"
-				@click="searchMovie()"
-				>Sök</b-button
-			>
-			<div v-for="(movie, index) in movieSeachedoutput" :key="index">
-				{{ movie.movieName }} {{ movie.movieYear }}
-				<select v-model="movie.selectedCategory">
-					<option value="">Välj yrke</option>
-					<option
-						v-for="(category, cindex) in movie.category"
-						:value="category"
-						:key="cindex">
-						{{ category.jobTitle }}
-					</option>
-				</select>
-				<button @click="addMovieToPerson(movie)">Lägg till film</button>
-				<button @click="test">test</button>
-			</div>
-		</div>
-
-		<b-card-group>
-			<b-card
-				v-for="movie in personMovies"
-				:title="movie.movieName"
-				img-alt="Image"
-				:img-src="`https://image.tmdb.org/t/p/w500${movie.moviePoster}`"
-				img-top
-				tag="article"
+	<div class="container">
+		<div
+			class="d-flex justify-content-center align-items-center flex-column"
+			v-if="personArr?.personName">
+			<h1>Admin för {{ personArr?.personName }}</h1>
+			<input type="text" v-model="Nname" />
+			{{ Nname }}
+			<button @click="changeName">change name</button>
+			<img
 				style="max-width: 20rem"
-				class="mb-2">
-				<b-card-text>
-					<p>{{ movie.movieyear }}</p>
-					{{ movie.movieDescription }}
-				</b-card-text>
-				<router-link
-					:to="{ name: 'movie', params: { movieId: movie.movieId } }">
-					Go to: {{ movie.movieName }}
-				</router-link>
-			</b-card>
-		</b-card-group>
+				:src="`https://image.tmdb.org/t/p/w500${personArr.personImg}`" />
+			<p>
+				{{ personArr.personBorn }}
+			</p>
+			<p>Filmer med {{ personArr.personName }}:</p>
+			<div>Lägg till film</div>
+			<div>
+				<b-form-input
+					class="mr-sm-1"
+					placeholder="Sök efter en film att lägga till"
+					v-model="movieSeacheInput"
+					required></b-form-input>
+				<b-button
+					variant="primary"
+					class="my-2 my-sm-0"
+					type="submit"
+					@click="searchMovie()"
+					>Sök</b-button
+				>
+				<div v-for="(movie, index) in movieSeachedoutput" :key="index">
+					{{ movie.movieName }} {{ movie.movieYear }}
+					<select v-model="movie.selectedCategory">
+						<option value="">Välj yrke</option>
+						<option
+							v-for="(category, cindex) in movie.category"
+							:value="category"
+							:key="cindex">
+							{{ category.jobTitle }}
+						</option>
+					</select>
+					<button @click="addMovieToPerson(movie)">Lägg till film</button>
+					<button @click="test">test</button>
+				</div>
+			</div>
+
+			<b-card-group>
+				<b-card
+					v-for="movie in personMovies"
+					:title="movie.movieName"
+					img-alt="Image"
+					:img-src="`https://image.tmdb.org/t/p/w500${movie.moviePoster}`"
+					img-top
+					tag="article"
+					style="max-width: 20rem"
+					class="mb-2">
+					<b-card-text>
+						<p>{{ movie.movieyear }}</p>
+						{{ movie.movieDescription }}
+					</b-card-text>
+					<button @click="deleteMovieFromActor(movie.movieId, movie.jobId)">
+						Ta bort film från skådespelare
+					</button>
+					{}
+					<router-link
+						:to="{ name: 'movie', params: { movieId: movie.movieId } }">
+						Go to: {{ movie.movieName }}
+					</router-link>
+				</b-card>
+			</b-card-group>
+		</div>
 	</div>
 </template>
 <style scoped></style>
