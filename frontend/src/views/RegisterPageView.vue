@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 const username = ref(null)
 const password = ref(null)
+const passwordConfirm = ref(null)
 let success = ref(false)
 let failure = ref(false)
 
@@ -23,9 +24,14 @@ async function registerNewUser(event) {
 })
 if (response.ok) {
   success.value = true
+  failure.value = false
+  username.value = ""
+  password.value = ""
+  passwordConfirm.value = ""
 }
 else {
   failure.value = true
+  success.value = false
 }
 }
 </script>
@@ -33,8 +39,8 @@ else {
 <template>
 <div class="register-form">
   <form method="post">
-    <input type="text" name="username" v-model="username">
-    <input type="text" name="password" v-model="password">
+    Username: <input type="text" v-model="username">
+    Password: <input type="password" v-model="password">
     <input type="submit" value="Register" @click="registerNewUser">
     <p v-if="success">A new user has been added!</p>
     <p v-if="failure">Something went wrong..</p>
@@ -43,3 +49,12 @@ else {
 </div>
 
 </template>
+
+<style scoped>
+.register-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+</style>

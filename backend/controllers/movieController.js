@@ -89,7 +89,7 @@ exports.deleteMovie = async (req, res) => {
 		});
 	}
 	try {
-		const deleteMovie = await queryDatabase(sql, id);
+		await queryDatabase(sql, id);
 
 		return res.status(201).json({
 			success: true,
