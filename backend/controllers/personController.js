@@ -54,7 +54,6 @@ exports.getActors = async (req, res) => {
 exports.deletePerson = async (req, res) => {
 	const { id } = req.params;
 	let sql = "CALL deletePerson( ? )";
-
 	if (!id) {
 		return res.status(400).json({
 			success: false,
@@ -63,7 +62,6 @@ exports.deletePerson = async (req, res) => {
 	}
 	try {
 		const deletePerson = await queryDatabase(sql, id);
-
 		return res.status(201).json({
 			success: true,
 			error: "",
@@ -131,11 +129,11 @@ exports.changeChangeName = async (req, res) => {
 	const { personName, personId } = req.params;
 	let personIdN = Number(personId);
 	try {
-		const jobTitle = await queryDatabase(
+		const personNameres = await queryDatabase(
 			"UPDATE person set personName = ?  WHERE personId = ?",
 			[personName, personIdN]
 		);
-		res.json(jobTitle);
+		res.json(personNameres);
 	} catch (e) {
 		return res.status(500).json({
 			error: e.message

@@ -33,7 +33,11 @@ function test() {
 async function changeName() {
 	try {
 		let response = await fetch(
-			`http://127.0.0.1:3000/api/changeChangeName/${Nname.value}/${route.params.personId}`
+			`http://127.0.0.1:3000/api/changeChangeName/${Nname.value}/${route.params.personId}`,
+			{
+				headers: { Authorization: `${token}` },
+				method: "PUT"
+			}
 		);
 		let data = await response.json();
 		getPerson();
@@ -60,16 +64,13 @@ async function searchMovie() {
 		);
 		if (response.ok) {
 			let data = await response.json();
-			console.log("data", data);
 			let withCategory = data.map((movie) => {
 				movie["category"] = categorys.value;
 				movie["selectedCategory"] = "";
 				console.log("categ", movie, categorys.value);
 				return movie;
 			});
-			// console.log("l", l);
 			movieSeachedoutput.value = withCategory;
-			// showSearch.value = true;
 		} else {
 			movieSeachedoutput.value = [];
 		}
@@ -86,13 +87,14 @@ async function addMovieToPerson(moviein) {
 	try {
 		let response = await fetch(`http://127.0.0.1:3000/api/addMovieToPerson`, {
 			method: "POST",
-			headers: { "Content-Type": "application/json" },
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `${token}`
+			},
 			body: JSON.stringify(body)
 		});
-
 		if (response.ok) {
 			let data = await response.json();
-			console.log("data", data);
 			getPerson();
 		} else {
 			console.log("response icke ok");
@@ -133,8 +135,18 @@ getCategory();
 			{{ Nname }}
 			<button @click="changeName">change name</button>
 			<img
+				v-if="personArr.personImg"
 				style="max-width: 20rem"
-				:src="`https://image.tmdb.org/t/p/w500${personArr.personImg}`" />
+				:src="`https://image.tmdb.org/t/p/w500${personArr.personImg}`"
+				alt="Image"
+				top />
+			<img
+				v-else
+				style="max-width: 20rem"
+				:src="`https://placehold.co/200x300/212529/FFF?text=?`"
+				alt="Image"
+				top />
+
 			<p>
 				{{ personArr.personBorn }}
 			</p>
@@ -165,7 +177,6 @@ getCategory();
 						</option>
 					</select>
 					<button @click="addMovieToPerson(movie)">Lägg till film</button>
-					<button @click="test">test</button>
 				</div>
 			</div>
 

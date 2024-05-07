@@ -107,8 +107,15 @@ watch(
 			v-if="personArr?.personName">
 			<h1>{{ personArr.personName }}</h1>
 			<img
+				v-if="personArr.personImg"
 				style="max-width: 20rem"
 				:src="`https://image.tmdb.org/t/p/w500${personArr.personImg}`" />
+			<img
+				v-else
+				style="max-width: 20rem"
+				:src="`https://placehold.co/200x300/212529/FFF?text=?`"
+				alt="Image"
+				top />
 			<p>
 				{{ personArr.personBorn }}
 			</p>

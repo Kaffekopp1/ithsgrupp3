@@ -21,12 +21,6 @@ router.get("/api/jobtitles/", personController.getJobTitle);
 router.delete("/api/delete/crew/:id", personController.deletePerson);
 router.post("/api/addJobbTitle", personController.addJobbTitle);
 
-router.post("/api/addMovieToPerson/", personController.addMovieToPerson);
-router.get(
-	"/api/changeChangeName/:personName/:personId",
-	personController.changeChangeName
-);
-
 router.get("/api/actor/:actor", searchController.getActorBySearch);
 router.get(
 	"/api/category/search/:search",
