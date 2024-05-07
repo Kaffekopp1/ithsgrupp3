@@ -86,6 +86,8 @@ async function importMovie() {
     if (response.success) {
       tmdbId.value = ''
       importMsg.value = 'ALLT GICK BRA !!'
+    } else {
+      importMsg.value = 'FEL :('
     }
   } catch (e) {
     importMsg.value = e;
