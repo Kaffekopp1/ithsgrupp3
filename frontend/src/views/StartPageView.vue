@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router';
 
 const movieDataV = ref(null)
 const router = useRouter()
-const amount = ref(10);
+const amount = ref(12);
 const showMoreBtn = ref(true)
 
 const getMovies = async () => {
@@ -24,7 +24,7 @@ const goToMovie = (id) => {
   router.push('/movie/' + id)
 }
 const showMore = async () => {
-  amount.value = amount.value + 10;
+  amount.value = amount.value + 12;
   await getMovies();
   if (amount.value > movieDataV.value.length) {
     showMoreBtn.value = false;
