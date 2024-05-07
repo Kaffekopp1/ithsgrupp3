@@ -14,7 +14,7 @@ router.put("/api/changeDescription/", movieController.changeMovieDescription);
 router.get("/api/specificMovie/:movieId", movieController.getSpecificMovie);
 
 router.get("/api/actorWithmovie/:actorId", personController.getActorWithmovie);
-router.delete("/api/moviefromactor/", personController.deleteMovieFromPerson);
+
 router.get("/api/actors/:amount", personController.getActors);
 router.get("/api/moviesactor/:movie", personController.getActorsMovie);
 router.get("/api/jobtitles/", personController.getJobTitle);
