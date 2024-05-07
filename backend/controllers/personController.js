@@ -23,7 +23,7 @@ exports.getActorsMovie = async (req, res) => {
 exports.getActorWithmovie = async (req, res) => {
 	const { actorId } = req.params;
 	let sql =
-		"SELECT JSON_ARRAYAGG(JSON_OBJECT( 'movieName', movieName, 'movieYear', movieYear, 'movieId', movieId, 'movieDescription', movieDescription, 'jobTitle', jobTitle, 'jobId', jobId,'moviePoster', moviePoster)) as movies,JSON_OBJECT('personName', personName, 'personBorn', personBorn, 'personImg',personImg) as actor from movie JOIN movieJobPerson mJP on movie.movieId = mJP.movieJobPersonMID JOIN job on mJP.movieJobPersonJID = job.jobId JOIN person p on p.personId = mJP.movieJobPersonPID where  p.personId = ?";
+		"SELECT JSON_ARRAYAGG(JSON_OBJECT( 'movieName', movieName, 'movieYear', movieYear, 'movieId', movieId, 'movieDescription', movieDescription, 'jobTitle', jobTitle, 'jobId', jobId,'moviePoster', moviePoster)) as movies,JSON_OBJECT('personName', personName, 'personBorn', personBorn, 'personImg',personImg) as actor from movie JOIN movieJobPerson mJP on movie.movieId = mJP.movieJobPersonMID JOIN job on mJP.movieJobPersonJID = job.jobId JOIN person p on p.personId = mJP.movieJobPersonPID where p.personId = ?";
 	try {
 		const actorWithmovies = await queryDatabase(sql, Number(actorId));
 		res.json(actorWithmovies);
@@ -82,7 +82,7 @@ exports.addJobbTitle = async (req, res) => {
 	const { jobb } = req.body;
 	let sql = "INSERT INTO job (jobTitle) VALUES (?)";
 	try {
-		const adderJobb = await queryDatabase(sql, jobb);
+		await queryDatabase(sql, jobb);
 		return res.status(201).json({
 			success: true,
 			error: "",
@@ -102,11 +102,7 @@ exports.addMovieToPerson = async (req, res) => {
 	const { personId, jobbId, movieId } = req.body;
 
 	try {
-		const addTheMovietoPerson = await queryDatabase(sql, [
-			personId,
-			jobbId,
-			movieId
-		]);
+		await queryDatabase(sql, [personId, jobbId, movieId]);
 		return res.status(201).json({
 			success: true,
 			error: "",

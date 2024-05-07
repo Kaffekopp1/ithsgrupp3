@@ -36,6 +36,7 @@ async function changeName() {
 			`http://127.0.0.1:3000/api/changeChangeName/${Nname.value}/${route.params.personId}`
 		);
 		let data = await response.json();
+		getPerson();
 		console.log(data);
 	} catch (error) {
 		console.log("error", error);
@@ -88,9 +89,11 @@ async function addMovieToPerson(moviein) {
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(body)
 		});
-		console.log("response", response);
+
 		if (response.ok) {
 			let data = await response.json();
+			console.log("data", data);
+			getPerson();
 		} else {
 			console.log("response icke ok");
 		}
@@ -110,6 +113,7 @@ async function deleteMovieFromActor(movieId, jobbId) {
 			},
 			body: JSON.stringify(body)
 		});
+		getPerson();
 		console.log("response", response);
 	} catch (error) {
 		console.log("error", error);
@@ -165,7 +169,7 @@ getCategory();
 				</div>
 			</div>
 
-			<b-card-group>
+			<b-card-group class="gap-2">
 				<b-card
 					v-for="movie in personMovies"
 					:title="movie.movieName"
@@ -179,14 +183,16 @@ getCategory();
 						<p>{{ movie.movieyear }}</p>
 						{{ movie.movieDescription }}
 					</b-card-text>
-					<button @click="deleteMovieFromActor(movie.movieId, movie.jobId)">
-						Ta bort film från skådespelare
-					</button>
-					{}
-					<router-link
-						:to="{ name: 'movie', params: { movieId: movie.movieId } }">
-						Go to: {{ movie.movieName }}
-					</router-link>
+					<div class="d-flex flex-column gap-2">
+						<button @click="deleteMovieFromActor(movie.movieId, movie.jobId)">
+							Ta bort film från skådespelare
+						</button>
+
+						<router-link
+							:to="{ name: 'movie', params: { movieId: movie.movieId } }">
+							Go to: {{ movie.movieName }}
+						</router-link>
+					</div>
 				</b-card>
 			</b-card-group>
 		</div>
