@@ -12,6 +12,7 @@ const Nname = ref("");
 const selected = ref("");
 const categorys = ref([]);
 
+const token = localStorage.getItem("token");
 async function getPerson() {
 	try {
 		let response = await fetch(
@@ -102,7 +103,11 @@ async function deleteMovieFromActor(movieId, jobbId) {
 	try {
 		let response = await fetch(`http://127.0.0.1:3000/api/moviefromactor`, {
 			method: "DELETE",
-			headers: { "Content-Type": "application/json" },
+
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `${token}`
+			},
 			body: JSON.stringify(body)
 		});
 		console.log("response", response);
