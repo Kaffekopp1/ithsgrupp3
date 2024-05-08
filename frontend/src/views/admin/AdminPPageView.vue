@@ -67,7 +67,6 @@ async function searchMovie() {
 			let withCategory = data.map((movie) => {
 				movie["category"] = categorys.value;
 				movie["selectedCategory"] = "";
-				console.log("categ", movie, categorys.value);
 				return movie;
 			});
 			movieSeachedoutput.value = withCategory;
@@ -196,7 +195,7 @@ getCategory();
 					</b-card-text>
 					<div class="d-flex flex-column gap-2">
 						<button @click="deleteMovieFromActor(movie.movieId, movie.jobId)">
-							Ta bort film från skådespelare
+							Ta bort film från {{ personArr.personName }}
 						</button>
 
 						<router-link

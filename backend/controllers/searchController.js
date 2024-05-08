@@ -73,7 +73,7 @@ exports.getFromSearch = async (req, res) => {
 	let sql = "call searcher( ? )";
 	try {
 		const getSearchResult = await queryDatabase(sql, keyword);
-		res.json(getSearchResult);
+		res.status(200).json(getSearchResult);
 	} catch (e) {
 		return res.status(500).json({
 			error: e.message

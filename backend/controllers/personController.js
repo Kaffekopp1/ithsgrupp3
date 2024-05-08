@@ -62,7 +62,7 @@ exports.deletePerson = async (req, res) => {
 	}
 	try {
 		const deletePerson = await queryDatabase(sql, id);
-		return res.status(201).json({
+		return res.status(200).json({
 			success: true,
 			error: "",
 			message: "Personen är raderad!"
@@ -104,7 +104,7 @@ exports.addMovieToPerson = async (req, res) => {
 		return res.status(201).json({
 			success: true,
 			error: "",
-			message: "movie inlaggt!"
+			message: "movie inlagt!"
 		});
 	} catch (error) {
 		return res.status(500).json({
@@ -151,7 +151,7 @@ exports.deleteMovieFromPerson = async (req, res) => {
 			Number(jobId),
 			Number(movieId)
 		]);
-		return res.status(201).json({
+		return res.status(200).json({
 			success: true,
 			error: "",
 			message: "Filmen borttagen ifrån personen"
