@@ -72,6 +72,7 @@ end;
   CREATE PROCEDURE deleteMovie (IN deleteMovieId INT)
   begin
     DELETE FROM movieJobPerson WHERE movieJobPersonMID = deleteMovieId;
+    DELETE FROM movieCategory WHERE movieCategoryMID = deleteMovieId;
     DELETE FROM movie WHERE movieId = deleteMovieId;
 end;
 

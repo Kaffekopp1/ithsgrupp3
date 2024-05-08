@@ -80,7 +80,9 @@ exports.getSpecificMovie = async (req, res) => {
 // delete movie by id
 exports.deleteMovie = async (req, res) => {
 	const { id } = req.params;
-	let sql = "CALL deleteMovie(?)";
+	let sql1 = "DELETE FROM movieJobPerson WHERE movieJobPersonMID = ?";
+	let sql2 = "DELETE FROM movieCategory WHERE movieCategoryMID = ?"
+	let sql3 = "DELETE FROM movie WHERE movieId = ? "
 
 	if (!id) {
 		return res.status(400).json({
@@ -89,7 +91,9 @@ exports.deleteMovie = async (req, res) => {
 		});
 	}
 	try {
-		await queryDatabase(sql, id);
+		await queryDatabase(sql1, id);
+		then(queryDatabase(sql2, id))
+		then(queryDatabase(sql3, id))
 
 		return res.status(201).json({
 			success: true,
