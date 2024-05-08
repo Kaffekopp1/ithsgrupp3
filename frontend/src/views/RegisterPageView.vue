@@ -49,12 +49,3 @@ else {
 </div>
 
 </template>
-
-<style scoped>
-.register-form {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-</style>
